@@ -31,6 +31,7 @@
     this.$target = this.$container.find('input[type=hidden]');
     this.$button = this.$container.find('.dropdown-toggle');
     this.$menu = $(this.options.menu).appendTo('body');
+    this.allowany = this.options.allowany || this.allowany;
     this.matcher = this.options.matcher || this.matcher;
     this.sorter = this.options.sorter || this.sorter;
     this.highlighter = this.options.highlighter || this.highlighter;
@@ -84,8 +85,13 @@
   , transferAttributes: function() {
     this.options.placeholder = this.$source.attr('data-placeholder') || this.options.placeholder;
     this.$element.attr('placeholder', this.options.placeholder);
-    this.$target.prop('name', this.$source.prop('name'));
-    this.$target.val(this.$source.val());
+    if (this.options.allowany) {
+        this.$element.prop('name', this.$source.prop('name'));
+        this.$element.val(this.$source.val());
+    } else {
+        this.$target.prop('name', this.$source.prop('name'));
+        this.$target.val(this.$source.val());
+    }
     this.$source.removeAttr('name');  // Remove from source otherwise form will pass parameter twice.
     this.$element.attr('required', this.$source.attr('required'));
     this.$element.attr('rel', this.$source.attr('rel'));
@@ -354,7 +360,7 @@
       var that = this;
       this.focused = false;
       var val = this.$element.val();
-      if (!this.selected && val !== '' ) {
+      if (!this.selected && val !== '' && !this.allowany) {
         this.$element.val('');
         this.$source.val('').trigger('change');
         this.$target.val('').trigger('change');
